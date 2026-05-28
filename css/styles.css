@@ -151,6 +151,11 @@ body::before {
   pointer-events: none;
 }
 
+/* Prevent tap on "Tap Anywhere" from clicking Yes underneath */
+.app.input-blocked {
+  pointer-events: none;
+}
+
 .loading-content {
   display: flex;
   flex-direction: column;

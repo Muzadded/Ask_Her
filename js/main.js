@@ -168,9 +168,14 @@
   // ─── Loading (tap unlocks audio + enters site) ───
   let siteEntered = false;
 
-  async function enterSite() {
+  async function enterSite(e) {
     if (siteEntered) return;
     siteEntered = true;
+
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
 
     if (
       CONFIG.musicUrl &&
@@ -188,15 +193,16 @@
     const meter = $("#loading-meter");
     let p = 0;
 
-    const go = () => enterSite();
+    const go = (e) => enterSite(e);
 
-    loadingScreen.addEventListener("pointerdown", go, { once: true });
+    // pointerup (not pointerdown) — avoids the tap "releasing" on Yes underneath
+    loadingScreen.addEventListener("pointerup", go, { once: true });
     loadingScreen.addEventListener(
       "keydown",
       (e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          go();
+          go(e);
         }
       },
       { once: true }
@@ -213,10 +219,17 @@
   }
 
   function finishLoading() {
+    showScreen("landing");
+
     loadingScreen.classList.add("fade-out");
     loadingScreen.setAttribute("aria-hidden", "true");
     app.classList.remove("hidden");
     appReady = true;
+
+    // Block the same tap from hitting Yes / No underneath
+    app.classList.add("input-blocked");
+    setTimeout(() => app.classList.remove("input-blocked"), 600);
+
     setTimeout(() => loadingScreen.remove(), 700);
   }
 
@@ -584,7 +597,12 @@
 
   // ─── Landing Yes ───
   function setupLanding() {
-    btnYes.addEventListener("click", () => {
+    btnYes.addEventListener("click", (e) => {
+      if (app.classList.contains("input-blocked")) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
       playSuccessSound();
       showScreen("celebrate");
       runConfetti();
