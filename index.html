@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#fff0f5" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="description" content="A special invitation just for you 💕" />
+  <title>Will you go on a date with me? 💖</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Nunito:wght@400;600;700;800&family=Pacifico&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body data-theme="default">
+
+  <!-- Loading screen -->
+  <div id="loading-screen" class="loading-screen" aria-hidden="false" role="button" tabindex="0">
+    <div class="loading-content">
+      <div class="loading-heart">💕</div>
+      <p class="loading-text">A little surprise for you<span class="loading-dots"></span></p>
+      <div class="love-meter-mini">
+        <div class="love-meter-fill" id="loading-meter"></div>
+      </div>
+      <p class="loading-tap" id="loading-tap">Tap Anywhere</p>
+    </div>
+  </div>
+
+  <!-- Floating decorations -->
+  <div id="hearts-container" class="hearts-container" aria-hidden="true"></div>
+  <div id="sparkles-container" class="sparkles-container" aria-hidden="true"></div>
+
+  <!-- Polaroids -->
+  <div id="polaroids" class="polaroids" aria-hidden="true"></div>
+
+  <!-- Music toggle -->
+  <button id="music-toggle" class="music-toggle" type="button" aria-label="Turn off music" title="Tap to turn music off 🎵">
+    <span class="music-icon">🔊</span>
+    <span class="music-label">Music</span>
+  </button>
+  <audio id="bg-music" loop preload="auto" playsinline webkit-playsinline></audio>
+
+  <!-- Main app -->
+  <main id="app" class="app hidden">
+
+    <!-- Screen 1: Landing -->
+    <section id="screen-landing" class="screen screen-active">
+      <div class="glass-card landing-card" id="landing-card">
+        <div class="ribbon">💌 Special Invitation</div>
+        <h1 class="title-script">Date Invite</h1>
+        <p id="typewriter" class="typewriter-text" aria-live="polite"></p>
+        <p class="landing-sub">Pick your answer below… no pressure (okay maybe a little) 🥺</p>
+        <blockquote class="romantic-quote">“You're the plot twist I never saw coming… but always hoped for.” 💕</blockquote>
+
+        <div id="photo-slideshow" class="photo-slideshow hidden">
+          <div class="slideshow-inner" id="slideshow-inner"></div>
+        </div>
+
+        <div class="btn-arena" id="btn-arena">
+          <div class="btn-group" id="landing-buttons">
+            <button id="btn-yes" class="btn btn-yes" type="button">
+              <span class="btn-glow"></span>
+              Yes 💖
+            </button>
+            <button id="btn-no" class="btn btn-no" type="button">No 😢</button>
+          </div>
+        </div>
+        <p class="flirt-hint">Psst… the "No" button is shy today 💕</p>
+      </div>
+    </section>
+
+    <!-- Screen 2: Celebration -->
+    <section id="screen-celebrate" class="screen hidden">
+      <canvas id="confetti-canvas"></canvas>
+      <div class="glass-card celebrate-card">
+        <div class="celebrate-emoji">🎉💕</div>
+        <h2>Yayyy!! You said yes!!</h2>
+        <p>Best answer ever. Let me plan our perfect date… ✨</p>
+        <blockquote class="romantic-quote">“My heart just did a full choreo — and it landed on you.” 🥺✨</blockquote>
+        <div class="love-meter">
+          <span class="love-meter-label">Love meter</span>
+          <div class="love-meter-track">
+            <div class="love-meter-fill heartbeat" id="celebrate-meter"></div>
+          </div>
+          <span class="love-meter-value" id="love-meter-value">0%</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Screen 3: Wizard -->
+    <section id="screen-wizard" class="screen hidden">
+      <div class="glass-card wizard-card">
+        <div class="wizard-progress">
+          <div class="progress-dots" id="progress-dots">
+            <span class="dot active" data-step="1"></span>
+            <span class="dot" data-step="2"></span>
+            <span class="dot" data-step="3"></span>
+            <span class="dot" data-step="4"></span>
+            <span class="dot" data-step="5"></span>
+          </div>
+          <p class="step-label">Step <span id="current-step-num">1</span> of <span id="total-step-count">5</span></p>
+        </div>
+
+        <!-- Step 1: Time -->
+        <div class="wizard-step active" data-step="1">
+          <h2>Yayyy!! 💖</h2>
+          <p>What time works for our special date? Pick from & to 🌸</p>
+          <blockquote class="romantic-quote">“Every second until I see you feels like waiting for a dream to finally come true.” ⏰💕</blockquote>
+          <div class="time-range">
+            <div class="time-field" id="time-field-from">
+              <label class="field-label" for="pick-time-from-hour">From</label>
+              <div class="time-picker-row">
+                <select id="pick-time-from-hour" class="input-cute time-select" aria-label="From hour"></select>
+                <span class="time-sep" aria-hidden="true">:</span>
+                <select id="pick-time-from-minute" class="input-cute time-select" aria-label="From minute"></select>
+                <select id="pick-time-from-ampm" class="input-cute time-select time-ampm" aria-label="From AM or PM">
+                  <option value="AM">AM</option>
+                  <option value="PM" selected>PM</option>
+                </select>
+              </div>
+            </div>
+            <div class="time-field" id="time-field-to">
+              <label class="field-label" for="pick-time-to-hour">To</label>
+              <div class="time-picker-row">
+                <select id="pick-time-to-hour" class="input-cute time-select" aria-label="To hour"></select>
+                <span class="time-sep" aria-hidden="true">:</span>
+                <select id="pick-time-to-minute" class="input-cute time-select" aria-label="To minute"></select>
+                <select id="pick-time-to-ampm" class="input-cute time-select time-ampm" aria-label="To AM or PM">
+                  <option value="AM">AM</option>
+                  <option value="PM" selected>PM</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-next" type="button" data-next="2">Next ✨</button>
+        </div>
+
+        <!-- Step 2: Place -->
+        <div class="wizard-step" data-step="2">
+          <h2>Where to? 🌸</h2>
+          <p>What kind of place would make you happiest? ✨</p>
+          <blockquote class="romantic-quote">“Rooftop, café, or the moon — anywhere is perfect if it's with you.” 📍💖</blockquote>
+          <div class="option-grid" id="place-options">
+            <button type="button" class="option-card" data-value="Rooftop 🌆">🌆 Rooftop</button>
+            <button type="button" class="option-card" data-value="Chef's Table 🍽️">🍽️ Chef's Table</button>
+            <button type="button" class="option-card" data-value="Korean Restaurant 🍜">🍜 Korean Restaurant</button>
+            <button type="button" class="option-card" data-value="Dessert Place 🍰">🍰 Dessert Place</button>
+            <button type="button" class="option-card" data-value="Toggy Fun World 🎡">🎡 Toggi Fun World</button>
+            <button type="button" class="option-card" data-value="Anywhere I will take you 💕">💕 Anywhere I will take you</button>
+          </div>
+          <label class="field-label" for="place-custom">Or type your own spot…</label>
+          <input type="text" id="place-custom" class="input-cute" placeholder="Your dream place ✨" maxlength="120" />
+          <div class="wizard-nav">
+            <button class="btn btn-back" type="button" data-prev="1">← Back</button>
+            <button class="btn btn-next" type="button" data-next="3">Next ✨</button>
+          </div>
+        </div>
+
+        <!-- Step 3: Food -->
+        <div class="wizard-step" data-step="3">
+          <h2>Yum time 🥺💕</h2>
+          <p>What should we eat together? Pick as many as you want! ✨</p>
+          <blockquote class="romantic-quote">“Sharing food with you is my favorite love language — no subtitles needed.” 🍽️💕</blockquote>
+          <div class="food-grid" id="food-options">
+            <button type="button" class="food-card" data-value="Yummy Rice Platter">🍚 Yummy Rice Platter</button>
+            <button type="button" class="food-card" data-value="Kacchim">🍛 Kacchi Roast</button>
+            <button type="button" class="food-card" data-value="Burger">🍔 Burger</button>
+            <button type="button" class="food-card" data-value="Pizza">🍕 Pizza</button>
+            <button type="button" class="food-card" data-value="Pasta">🍝 Pasta</button>
+            <button type="button" class="food-card" data-value="Ramen">🍜 Ramen</button>
+            <button type="button" class="food-card" data-value="Waffle">🧇 Waffle</button>
+            <button type="button" class="food-card" data-value="Ice Cream">🍦 Ice Cream</button>
+          </div>
+          <label class="field-label" for="food-custom">Your favorites…</label>
+          <input type="text" id="food-custom" class="input-cute" placeholder="Snacks, desserts, anything 🍰" maxlength="120" />
+          <div class="wizard-nav">
+            <button class="btn btn-back" type="button" data-prev="2">← Back</button>
+            <button class="btn btn-next" type="button" data-next="4">Next ✨</button>
+          </div>
+        </div>
+
+        <!-- Step 4: K-pop -->
+        <div class="wizard-step" data-step="4">
+          <h2>Pick our vibe 🎶✨</h2>
+          <p>What K-pop vibe should our date have?</p>
+          <blockquote class="romantic-quote">“You + me + our playlist = the sweetest song the universe ever wrote.” 🎶✨</blockquote>
+          <div class="kpop-grid" id="kpop-options">
+            <button type="button" class="kpop-card" data-theme="bts" data-value="BTS 💜">💜 BTS</button>
+            <button type="button" class="kpop-card" data-theme="blackpink" data-value="BLACKPINK 🖤💖">🖤💖 BLACKPINK</button>
+            <button type="button" class="kpop-card" data-theme="twice" data-value="TWICE 🍭">🍭 TWICE</button>
+            <button type="button" class="kpop-card" data-theme="newjeans" data-value="NewJeans 🐰">🐰 NewJeans</button>
+            <button type="button" class="kpop-card" data-theme="straykids" data-value="Stray Kids ⚡">⚡ Stray Kids</button>
+            <button type="button" class="kpop-card" data-theme="seventeen" data-value="SEVENTEEN 💎">💎 SEVENTEEN</button>
+            <button type="button" class="kpop-card" data-theme="txt" data-value="TXT ✨">✨ TXT</button>
+          </div>
+          <label class="field-label" for="kpop-custom">Or your own stan list…</label>
+          <input type="text" id="kpop-custom" class="input-cute" placeholder="Any group / artist 🎤" maxlength="80" />
+          <div class="wizard-nav">
+            <button class="btn btn-back" type="button" data-prev="3">← Back</button>
+            <button class="btn btn-next" type="button" data-next="5">Next ✨</button>
+          </div>
+        </div>
+
+        <!-- Step 5: Message -->
+        <div class="wizard-step" data-step="5">
+          <h2>One more thing… 🫣</h2>
+          <p>Before our Date Start do you have anything to say me? 🫣</p>
+          <blockquote class="romantic-quote">“Your words hit softer than any lyric — and they stay in my heart all day.” 💌🫣</blockquote>
+          <label class="field-label" for="date-message">Your message</label>
+          <textarea id="date-message" class="input-cute textarea-cute" rows="4" placeholder="Say anything… I'm listening 💕" maxlength="500"></textarea>
+          <div class="wizard-nav">
+            <button class="btn btn-back" type="button" data-prev="4">← Back</button>
+            <button class="btn btn-submit" type="button" id="btn-finish">Finish 💕</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Screen 4: Summary -->
+    <section id="screen-summary" class="screen hidden">
+      <div class="glass-card summary-card">
+        <div class="summary-sparkle">✨</div>
+        <h2 class="title-script">Our K-Drama Date</h2>
+        <p class="summary-tagline">It's officially happening 💕</p>
+        <blockquote class="romantic-quote">“This isn't just a date… it's scene one of our forever.” 🥺💖</blockquote>
+
+        <div class="summary-details" id="summary-details">
+          <div class="summary-row">
+            <span class="summary-icon">🕐</span>
+            <div>
+              <span class="summary-label">Time</span>
+              <span class="summary-value" id="sum-time">—</span>
+            </div>
+          </div>
+          <div class="summary-row">
+            <span class="summary-icon">📍</span>
+            <div>
+              <span class="summary-label">Where</span>
+              <span class="summary-value" id="sum-place">—</span>
+            </div>
+          </div>
+          <div class="summary-row">
+            <span class="summary-icon">🍽️</span>
+            <div>
+              <span class="summary-label">Food</span>
+              <span class="summary-value" id="sum-food">—</span>
+            </div>
+          </div>
+          <div class="summary-row">
+            <span class="summary-icon">🎶</span>
+            <div>
+              <span class="summary-label">K-pop vibe</span>
+              <span class="summary-value" id="sum-kpop">—</span>
+            </div>
+          </div>
+          <div class="summary-row">
+            <span class="summary-icon">💌</span>
+            <div>
+              <span class="summary-label">Her message</span>
+              <span class="summary-value summary-message" id="sum-message">—</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="final-message" id="final-message">
+          The moment I get to see you is finally real… and my heart is already racing. 💕✨🌸<br />
+          I seriously can't wait to spend this Friday with you, My Queen. 🥺💖👑
+        </p>
+
+        <div id="email-status" class="email-status hidden" role="status"></div>
+
+        <button id="btn-replay" class="btn btn-secondary" type="button">Read again 💌</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
